@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, nextTick } from "vue";
+import router from "../router";
 
 const procedureName = ref("");
 const procedureMinistry = ref("");
@@ -30,17 +31,18 @@ async function addContact() {
 }
 
 /**
- * Delete contact at index and focus previous name field.
+ * Delete contact at index and focus previous or first name field.
  * @param {number} i
  */
 async function deleteContact(i: number) {
   procedureRecipients.value.splice(i, 1);
   await nextTick();
-  const previousInput = contactNameRefs.value[i - 1];
+  const previousInput =
+    i === 0 ? contactNameRefs.value[0] : contactNameRefs.value[i - 1];
   previousInput.focus();
 }
 
-function submitFirstStep() {
+function submitStepOne() {
   // TODO: complete
   const data = {
     procedureName: procedureName.value,
@@ -55,6 +57,7 @@ function submitFirstStep() {
     procedureAuditorEmail: procedureAuditorEmail.value,
   };
   console.log(data);
+  router.push({ name: "new-audit-step-two" });
 }
 
 /**
@@ -92,7 +95,7 @@ function fillFields() {
       <span class="fr-text--bold">Étape suivante :</span> Paramètres de l’audit
     </p>
   </div>
-  <form class="content" @submit.prevent="submitFirstStep">
+  <form class="content" @submit.prevent="submitStepOne">
     <h1>📄 Informations générales de la démarche à auditer</h1>
 
     <button class="fr-btn fr-mb-1w" type="button" @click="fillFields">
