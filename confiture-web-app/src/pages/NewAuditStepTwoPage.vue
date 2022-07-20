@@ -3,14 +3,26 @@ import { ref, nextTick } from "vue";
 import router from "../router";
 import AuditType from "../components/AuditType.vue";
 
-const auditTypes = [
+const availableAuditTypes = [
   { label: "Rapide", value: "fast", badge: "25 critères" },
   { label: "Complémentaire", value: "complementary", badge: "50 critères" },
   { label: "Complet", value: "full", badge: "106 critères" },
 ];
+const availableTools = [
+  "Web Accessibility Toolbar",
+  "Validateur en ligne W3C",
+  "WCAG Contrast checker",
+  "Color Contrast Analyser",
+  "HeadingsMap",
+  "PAC (PDF Accessibility Checker)",
+  "Word Accessibility Plug-in pour Microsoft Office Windows",
+  "AccessODF pour LibreOffice",
+  "Ace by DAISY App",
+  "PEAT (Photosensitive Epilepsy Analysis Tool)",
+];
 
-const auditType = ref<string>('')
-
+const auditType = ref<string>("");
+const tools = ref<string[]>([]);
 const pages = ref([
   {
     name: "",
@@ -19,6 +31,20 @@ const pages = ref([
 ]);
 
 const pageNameRefs = ref<HTMLInputElement[]>([]);
+
+/**
+ * Add or remove a tool from the list.
+ * @param {string} tool
+ */
+async function toggleTool(tool: string) {
+  const toolIndex = tools.value.indexOf(tool);
+
+  if (toolIndex === -1) {
+    tools.value.push(tool);
+  } else {
+    tools.value.splice(toolIndex, 1);
+  }
+}
 
 /**
  * Create a new page and focus its name
@@ -70,28 +96,43 @@ function toStepOne() {
       Sauf mention contraire, tous les champs sont obligatoires.
     </p>
 
-    <div class="fr-form-group">
+    <section class="fr-form-group">
       <fieldset class="fr-fieldset">
         <legend id="radio-rich-legend" class="fr-fieldset__legend">
           <h2 class="fr-h4 fr-mb-0">Type d’audit</h2>
         </legend>
         <div class="fr-fieldset__content audit-types">
           <AuditType
-            v-for="type in auditTypes"
+            v-for="type in availableAuditTypes"
             :key="type.value"
+            v-model="auditType"
             :value="type.value"
             :label="type.label"
             :badge="type.badge"
-            v-model="auditType"
             :checked="auditType === type.value"
           />
         </div>
       </fieldset>
-    </div>
+    </section>
 
     <div class="content">
-      <h2 class="fr-h4">Les outils d’audit</h2>
+      <section class="fr-mb-4w">
+        <h2 class="fr-h4">Les outils d’audit</h2>
+        <ul class="fr-tags-group">
+          <li v-for="(tool, i) in availableTools" :key="i">
+            <button
+              type="button"
+              class="fr-tag"
+              aria-pressed="false"
+              @click="toggleTool(tool)"
+            >
+              {{ tool }}
+            </button>
+          </li>
+        </ul>
+      </section>
       <h2 class="fr-h4">Les environnements de test</h2>
+      <p>TO DO...</p>
       <h2 class="fr-h4">Les pages et URL à auditer</h2>
 
       <fieldset
