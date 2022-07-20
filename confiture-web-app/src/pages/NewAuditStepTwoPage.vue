@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, nextTick } from "vue";
 import router from "../router";
+import AuditType from "../components/AuditType.vue";
 
 const auditTypes = [
   { label: "Rapide", value: "fast", badge: "25 critères" },
@@ -67,34 +68,20 @@ function toStepOne() {
       Sauf mention contraire, tous les champs sont obligatoires.
     </p>
 
-    <h2 class="fr-h4">Type d’audit</h2>
-
     <div class="fr-form-group">
       <fieldset class="fr-fieldset">
         <legend id="radio-rich-legend" class="fr-fieldset__legend">
-          Légende pour l’ensemble de champs
+          <h2 class="fr-h4 fr-mb-0">Type d’audit</h2>
         </legend>
-        <div class="fr-fieldset__content">
-          <div
+        <div class="fr-fieldset__content audit-types">
+          <AuditType
             v-for="type in auditTypes"
             :key="type.value"
-            class="fr-radio-group fr-radio-rich"
-          >
-            <p class="fr-badge fr-badge--sm fr-badge--purple-glycine">
-              {{ type.badge }}
-            </p>
-            <input
-              :id="`audit-type-${type.value}`"
-              type="radio"
-              name="audit-type"
-            />
-            <label
-              class="fr-label fr-text--xl fr-text--bold"
-              :for="`audit-type-${type.value}`"
-            >
-              {{ type.label }}
-            </label>
-          </div>
+            :type="type"
+            :value="type.value"
+            :label="type.label"
+            :badge="type.badge"
+          />
         </div>
       </fieldset>
     </div>
@@ -179,6 +166,12 @@ function toStepOne() {
 
 .mandatory-notice {
   color: var(--text-mention-grey);
+}
+
+.audit-types {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
 }
 
 .page-header {
