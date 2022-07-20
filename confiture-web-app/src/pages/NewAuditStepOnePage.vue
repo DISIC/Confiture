@@ -237,7 +237,7 @@ function fillFields() {
       >
         <div class="fr-mb-2w contact-header">
           <legend>
-            <h3 class="fr-h6 fr-mb-0">Contact {{ i + 1 }}</h3>
+            <h3 class="fr-text--lg fr-mb-0">Contact {{ i + 1 }}</h3>
           </legend>
 
           <button
