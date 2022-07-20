@@ -9,6 +9,8 @@ const auditTypes = [
   { label: "Complet", value: "full", badge: "106 critères" },
 ];
 
+const auditType = ref<string>('')
+
 const pages = ref([
   {
     name: "",
@@ -77,10 +79,11 @@ function toStepOne() {
           <AuditType
             v-for="type in auditTypes"
             :key="type.value"
-            :type="type"
             :value="type.value"
             :label="type.label"
             :badge="type.badge"
+            v-model="auditType"
+            :checked="auditType === type.value"
           />
         </div>
       </fieldset>
